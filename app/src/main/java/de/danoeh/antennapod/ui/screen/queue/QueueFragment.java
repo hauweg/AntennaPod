@@ -680,9 +680,6 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                               @NonNull RecyclerView.ViewHolder target) {
-            if (tagFilterBar.isFiltering()) {
-                return false;
-            }
             int fromPosition = viewHolder.getBindingAdapterPosition();
             int toPosition = target.getBindingAdapterPosition();
 
@@ -732,6 +729,17 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         private void reallyMoved(int from, int to) {
             // Write drag operation to database
             Log.d(TAG, "Write to database move(" + from + ", " + to + ")");
+            if (tagFilterBar.isFiltering()) {
+                long itemId = queue.get(to).getId();
+                long neighborId = queue.get(to > from ? to - 1 : to + 1).getId();
+                Observable.fromCallable(() -> {
+                    EpisodeTagStorage.moveQueueItem(itemId, neighborId);
+                    return true;
+                })
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(result -> { }, error -> Log.e(TAG, Log.getStackTraceString(error)));
+                return;
+            }
             DBWriter.moveQueueItem(from, to, true);
         }
 
