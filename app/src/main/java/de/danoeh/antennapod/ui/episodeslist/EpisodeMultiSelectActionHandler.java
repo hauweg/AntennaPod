@@ -24,6 +24,7 @@ import de.danoeh.antennapod.model.feed.FeedItem;
 import de.danoeh.antennapod.storage.preferences.PlaybackPreferences;
 import de.danoeh.antennapod.storage.preferences.SynchronizationSettings;
 import de.danoeh.antennapod.ui.share.ShareDialog;
+import de.danoeh.antennapod.ui.episodetags.EpisodeTagDialog;
 import de.danoeh.antennapod.ui.view.LocalDeleteModal;
 
 import org.greenrobot.eventbus.EventBus;
@@ -79,8 +80,8 @@ public class EpisodeMultiSelectActionHandler {
                 toQueue.add(episode);
             }
         }
-        DBWriter.addQueueItem(activity, toQueue.toArray(new FeedItem[0]));
-        showMessage(R.plurals.added_to_queue_message, toQueue.size());
+        EpisodeTagDialog.addToQueue(activity, toQueue,
+                () -> showMessage(R.plurals.added_to_queue_message, toQueue.size()));
     }
 
     private void removeFromQueueChecked(List<FeedItem> items) {

@@ -45,6 +45,7 @@ import java.util.List;
 import de.danoeh.antennapod.R;
 import de.danoeh.antennapod.activity.MainActivity;
 import de.danoeh.antennapod.ui.episodeslist.EpisodeItemListAdapter;
+import de.danoeh.antennapod.ui.episodetags.EpisodeTagFilterBar;
 import de.danoeh.antennapod.ui.common.ConfirmationDialog;
 import de.danoeh.antennapod.ui.MenuItemUtils;
 import de.danoeh.antennapod.storage.database.DBReader;
@@ -102,6 +103,7 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
 
     private FloatingSelectMenu floatingSelectMenu;
     private ProgressBar progressBar;
+    private EpisodeTagFilterBar tagFilterBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +140,7 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         Log.d(TAG, "onEventMainThread() called with: " + "event = [" + event + "]");
         if (queue == null) {
             return;
-        } else if (recyclerAdapter == null) {
+        } else if (recyclerAdapter == null || tagFilterBar.isFiltering()) {
             loadItems();
             return;
         }
@@ -429,6 +431,7 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         boolean largePadding = displayUpArrow || !UserPreferences.isBottomNavigationEnabled();
         int paddingHorizontal = (int) (getResources().getDisplayMetrics().density * (largePadding ? 60 : 16));
         infoBar.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
+        tagFilterBar = EpisodeTagFilterBar.attachTo(root, "queue", false, this::loadItems);
 
         recyclerView = root.findViewById(R.id.recyclerView);
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
@@ -532,7 +535,7 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         }
         disposable = Observable.fromCallable(() -> {
             boolean displayGoToInboxButton = DBReader.getTotalEpisodeCount(new FeedItemFilter(FeedItemFilter.NEW)) > 0;
-            return new Pair<>(DBReader.getQueue(), displayGoToInboxButton);
+            return new Pair<>(tagFilterBar.filter(DBReader.getQueue()), displayGoToInboxButton);
         })
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -675,6 +678,9 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                               @NonNull RecyclerView.ViewHolder target) {
+            if (tagFilterBar.isFiltering()) {
+                return false;
+            }
             int fromPosition = viewHolder.getBindingAdapterPosition();
             int toPosition = target.getBindingAdapterPosition();
 

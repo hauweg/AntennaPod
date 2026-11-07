@@ -24,8 +24,10 @@ import de.danoeh.antennapod.model.feed.FeedItemFilter;
 import de.danoeh.antennapod.model.feed.SortOrder;
 import de.danoeh.antennapod.storage.preferences.UserPreferences;
 import de.danoeh.antennapod.ui.episodeslist.EpisodesListFragment;
+import de.danoeh.antennapod.ui.episodetags.EpisodeTagFilterBar;
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +40,7 @@ public class InboxFragment extends EpisodesListFragment {
     private static final String PREF_DO_NOT_PROMPT_REMOVE_ALL_FROM_INBOX = "prefDoNotPromptRemovalAllFromInbox";
     private SharedPreferences prefs;
     private static Pair<Integer, Integer> scrollPosition = null;
+    private EpisodeTagFilterBar tagFilterBar;
 
     @NonNull
     @Override
@@ -46,6 +49,7 @@ public class InboxFragment extends EpisodesListFragment {
         toolbar.inflateMenu(R.menu.inbox);
         toolbar.setTitle(R.string.inbox_label);
         prefs = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        tagFilterBar = EpisodeTagFilterBar.attachTo(root, "inbox", true, this::loadItems);
         updateToolbar();
         emptyView.setIcon(R.drawable.ic_inbox);
         emptyView.setTitle(R.string.no_inbox_head_label);
@@ -96,19 +100,26 @@ public class InboxFragment extends EpisodesListFragment {
     @NonNull
     @Override
     protected List<FeedItem> loadData() {
-        return DBReader.getEpisodes(0, page * EPISODES_PER_PAGE,
-                new FeedItemFilter(FeedItemFilter.NEW),  UserPreferences.getInboxSortedOrder());
+        return tagFilterBar.filter(DBReader.getEpisodes(0,
+                tagFilterBar.isFiltering() ? Integer.MAX_VALUE : page * EPISODES_PER_PAGE,
+                new FeedItemFilter(FeedItemFilter.NEW),  UserPreferences.getInboxSortedOrder()));
     }
 
     @NonNull
     @Override
     protected List<FeedItem> loadMoreData(int page) {
+        if (tagFilterBar.isFiltering()) {
+            return new ArrayList<>();
+        }
         return DBReader.getEpisodes((page - 1) * EPISODES_PER_PAGE, EPISODES_PER_PAGE,
                 new FeedItemFilter(FeedItemFilter.NEW), UserPreferences.getInboxSortedOrder());
     }
 
     @Override
     protected int loadTotalItemCount() {
+        if (tagFilterBar.isFiltering()) {
+            return tagFilterBar.getLastResultSize();
+        }
         return DBReader.getTotalEpisodeCount(new FeedItemFilter(FeedItemFilter.NEW));
     }
 
