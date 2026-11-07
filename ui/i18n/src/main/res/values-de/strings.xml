@@ -880,6 +880,8 @@
     <string name="statistics_expected_next_episode_any_time">Jederzeit</string>
     <string name="release_schedule_multiple_per_day">mehrmals täglich</string>
     <string name="tag_all">Alle</string>
+    <string name="inbox_view_unseen">Ungesehen</string>
+    <string name="inbox_view_all_new">Alle neuen</string>
     <string name="cover_as_background">Titelbild als Hintergrund</string>
     <string name="archive_feed_label_verb">Archivieren</string>
     <string name="archive_feed_label_noun">Archiv</string>

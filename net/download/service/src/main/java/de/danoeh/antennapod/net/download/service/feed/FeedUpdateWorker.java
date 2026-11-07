@@ -26,6 +26,7 @@ import de.danoeh.antennapod.net.download.serviceinterface.AutoDownloadManager;
 import de.danoeh.antennapod.net.download.serviceinterface.DownloadRequestCreator;
 import de.danoeh.antennapod.net.sync.serviceinterface.SynchronizationQueue;
 import de.danoeh.antennapod.storage.database.DBReader;
+import de.danoeh.antennapod.storage.database.InboxSeenStorage;
 import de.danoeh.antennapod.storage.database.FeedDatabaseWriter;
 import de.danoeh.antennapod.storage.database.DBWriter;
 import de.danoeh.antennapod.net.common.NetworkUtils;
@@ -109,6 +110,9 @@ public class FeedUpdateWorker extends Worker {
                 Log.d(TAG, "Blocking automatic update");
                 return Result.retry();
             }
+        }
+        if (feedId == -1) {
+            InboxSeenStorage.recordRefresh(getApplicationContext());
         }
         refreshFeeds(toUpdate,  force);
 
