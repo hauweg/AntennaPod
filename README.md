@@ -1,3 +1,19 @@
+> [!WARNING]
+> **This is a personal, unofficial fork of AntennaPod.**
+> The changes below were "vibe coded" with an AI assistant (Claude Code) for my own use and testing.
+> They are not reviewed, not optimized, and come without any warranty.
+> They are **not** intended to be merged into the official AntennaPod app.
+> For the real app, please use [AntennaPod/AntennaPod](https://github.com/AntennaPod/AntennaPod).
+>
+> **Changes in this fork** (November 2026, on branch `claude/kind-dirac-17amya`):
+> - **Episode tags:** When adding an episode to the queue, a dialog lets you assign tags (podcast tags are preselected). Tags can also be edited from the context menu. They are stored in a separate database file (`EpisodeTags.db`); AntennaPod's own database schema is unchanged.
+> - **Tag filter bar** in the queue and the inbox, including an "Untagged" chip. The inbox filter also matches podcast tags.
+> - **Playback within a tag:** When a tag is selected in the queue, playback continues with the next queued episode that has that tag.
+> - **Inbox "Unseen" view:** Episodes you scroll past are greyed out and hidden after the next refresh of all podcasts. You can switch between "Unseen" and "All new". The seen state is stored in a separate database file (`InboxSeen.db`).
+> - **Build workflow** (`.github/workflows/fork-debug-apk.yml`): builds a signed debug APK on every push.
+>
+> Known limitations: drag-to-reorder is disabled while a tag filter is active; "Remove all from inbox" affects all episodes; tags of played episodes are kept.
+
 # AntennaPod
 
 [![GitHub check runs](https://img.shields.io/github/actions/workflow/status/AntennaPod/AntennaPod/checks.yml?branch=develop)](https://github.com/AntennaPod/AntennaPod/actions/workflows/checks.yml?query=branch%3Adevelop)
