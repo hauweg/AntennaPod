@@ -413,6 +413,10 @@ public final class DBReader {
     @Nullable
     public static synchronized FeedItem getNextInQueue(FeedItem item) {
         Log.d(TAG, "getNextInQueue() called with: " + "itemId = [" + item.getId() + "]");
+        String episodeTag = EpisodeTagStorage.getActiveQueueTag();
+        if (episodeTag != null) {
+            return EpisodeTagStorage.getNextInQueue(item, episodeTag);
+        }
         PodDBAdapter adapter = PodDBAdapter.getInstance();
         adapter.open();
         try (FeedItemCursor cursor = new FeedItemCursor(adapter.getNextInQueue(item))) {

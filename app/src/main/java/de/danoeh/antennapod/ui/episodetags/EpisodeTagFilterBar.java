@@ -19,6 +19,7 @@ import java.util.Set;
 
 import de.danoeh.antennapod.R;
 import de.danoeh.antennapod.model.feed.FeedItem;
+import de.danoeh.antennapod.storage.database.EpisodeTagStorage;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -29,7 +30,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class EpisodeTagFilterBar extends HorizontalScrollView {
     private static final String TAG = "EpisodeTagFilterBar";
-    private static final String PREFS = "EpisodeTagFilter";
 
     private final String screenKey;
     private final boolean includeFeedTags;
@@ -54,7 +54,7 @@ public class EpisodeTagFilterBar extends HorizontalScrollView {
         this.screenKey = screenKey;
         this.includeFeedTags = includeFeedTags;
         this.onSelectionChanged = onSelectionChanged;
-        prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(EpisodeTagStorage.FILTER_PREFS, Context.MODE_PRIVATE);
         selectedTag = prefs.getString(screenKey, null);
         setHorizontalScrollBarEnabled(false);
         setVisibility(selectedTag == null ? GONE : VISIBLE);

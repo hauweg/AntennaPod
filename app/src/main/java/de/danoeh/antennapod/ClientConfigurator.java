@@ -22,6 +22,7 @@ import de.danoeh.antennapod.net.download.service.feed.DownloadServiceInterfaceIm
 import de.danoeh.antennapod.net.common.NetworkUtils;
 import de.danoeh.antennapod.net.ssl.SslProviderInstaller;
 import de.danoeh.antennapod.storage.database.PodDBAdapter;
+import de.danoeh.antennapod.storage.database.EpisodeTagStorage;
 
 import de.danoeh.antennapod.ui.notifications.NotificationUtils;
 import java.io.File;
@@ -40,6 +41,7 @@ public class ClientConfigurator {
             e.printStackTrace();
         }
         PodDBAdapter.init(context);
+        EpisodeTagStorage.init(context);
         UserPreferences.init(context);
         SynchronizationCredentials.init(context);
         SynchronizationSettings.init(context);

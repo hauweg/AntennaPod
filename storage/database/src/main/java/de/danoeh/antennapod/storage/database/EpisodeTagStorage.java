@@ -1,4 +1,4 @@
-package de.danoeh.antennapod.ui.episodetags;
+package de.danoeh.antennapod.storage.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.Nullable;
+
+import de.danoeh.antennapod.model.feed.FeedItem;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -22,14 +25,47 @@ public class EpisodeTagStorage extends SQLiteOpenHelper {
     private static final String TABLE = "EpisodeTags";
     private static final String KEY_ITEM = "feeditem";
     private static final String KEY_TAG = "tag";
+    public static final String FILTER_PREFS = "EpisodeTagFilter";
+    public static final String QUEUE_FILTER_KEY = "queue";
 
+    private static Context appContext;
     private static EpisodeTagStorage instance;
+
+    public static void init(Context context) {
+        appContext = context.getApplicationContext();
+    }
 
     public static synchronized EpisodeTagStorage getInstance(Context context) {
         if (instance == null) {
             instance = new EpisodeTagStorage(context.getApplicationContext());
         }
         return instance;
+    }
+
+    @Nullable
+    public static String getActiveQueueTag() {
+        if (appContext == null) {
+            return null;
+        }
+        return appContext.getSharedPreferences(FILTER_PREFS, Context.MODE_PRIVATE)
+                .getString(QUEUE_FILTER_KEY, null);
+    }
+
+    @Nullable
+    static FeedItem getNextInQueue(FeedItem item, String tag) {
+        LongList queueIds = DBReader.getQueueIDList();
+        int index = queueIds.indexOf(item.getId());
+        if (index < 0) {
+            return null;
+        }
+        Map<Long, Set<String>> itemTags = getInstance(appContext).getAllItemTags();
+        for (int i = index + 1; i < queueIds.size(); i++) {
+            Set<String> tags = itemTags.get(queueIds.get(i));
+            if (tags != null && tags.contains(tag)) {
+                return DBReader.getFeedItem(queueIds.get(i));
+            }
+        }
+        return null;
     }
 
     private EpisodeTagStorage(Context context) {

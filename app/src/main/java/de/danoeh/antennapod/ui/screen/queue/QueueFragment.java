@@ -46,6 +46,7 @@ import de.danoeh.antennapod.R;
 import de.danoeh.antennapod.activity.MainActivity;
 import de.danoeh.antennapod.ui.episodeslist.EpisodeItemListAdapter;
 import de.danoeh.antennapod.ui.episodetags.EpisodeTagFilterBar;
+import de.danoeh.antennapod.storage.database.EpisodeTagStorage;
 import de.danoeh.antennapod.ui.common.ConfirmationDialog;
 import de.danoeh.antennapod.ui.MenuItemUtils;
 import de.danoeh.antennapod.storage.database.DBReader;
@@ -431,7 +432,8 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
         boolean largePadding = displayUpArrow || !UserPreferences.isBottomNavigationEnabled();
         int paddingHorizontal = (int) (getResources().getDisplayMetrics().density * (largePadding ? 60 : 16));
         infoBar.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
-        tagFilterBar = EpisodeTagFilterBar.attachTo(root, "queue", false, this::loadItems);
+        tagFilterBar = EpisodeTagFilterBar.attachTo(root, EpisodeTagStorage.QUEUE_FILTER_KEY, false,
+                this::loadItems);
 
         recyclerView = root.findViewById(R.id.recyclerView);
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
