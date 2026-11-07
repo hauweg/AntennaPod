@@ -26,6 +26,7 @@ import de.danoeh.antennapod.net.download.serviceinterface.AutoDownloadManager;
 import de.danoeh.antennapod.net.download.serviceinterface.DownloadRequestCreator;
 import de.danoeh.antennapod.net.sync.serviceinterface.SynchronizationQueue;
 import de.danoeh.antennapod.storage.database.DBReader;
+import de.danoeh.antennapod.storage.database.EpisodeTagStorage;
 import de.danoeh.antennapod.storage.database.InboxSeenStorage;
 import de.danoeh.antennapod.storage.database.FeedDatabaseWriter;
 import de.danoeh.antennapod.storage.database.DBWriter;
@@ -113,6 +114,7 @@ public class FeedUpdateWorker extends Worker {
         }
         if (feedId == -1) {
             InboxSeenStorage.recordRefresh(getApplicationContext());
+            EpisodeTagStorage.getInstance(getApplicationContext()).cleanUp();
         }
         refreshFeeds(toUpdate,  force);
 

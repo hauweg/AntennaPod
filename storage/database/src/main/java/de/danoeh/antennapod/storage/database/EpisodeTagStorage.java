@@ -70,6 +70,31 @@ public class EpisodeTagStorage extends SQLiteOpenHelper {
         return null;
     }
 
+    public static void moveQueueItem(long itemId, long neighborId) {
+        LongList queueIds = DBReader.getQueueIDList();
+        int from = queueIds.indexOf(itemId);
+        int to = queueIds.indexOf(neighborId);
+        if (from >= 0 && to >= 0 && from != to) {
+            DBWriter.moveQueueItem(from, to, true);
+        }
+    }
+
+    public void cleanUp() {
+        LongList queueIds = DBReader.getQueueIDList();
+        List<Long> obsolete = new ArrayList<>();
+        for (long itemId : getAllItemTags().keySet()) {
+            if (!queueIds.contains(itemId)) {
+                FeedItem item = DBReader.getFeedItem(itemId);
+                if (item == null || item.isPlayed()) {
+                    obsolete.add(itemId);
+                }
+            }
+        }
+        if (!obsolete.isEmpty()) {
+            setTags(obsolete, new HashSet<>());
+        }
+    }
+
     private EpisodeTagStorage(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
