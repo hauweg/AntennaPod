@@ -836,6 +836,10 @@
     <string name="feed_tags_summary">Change the tags of this podcast to help organize your subscriptions</string>
     <string name="feed_folders_include_root">Show above tags (side navigation only)</string>
     <string name="tag_all">All</string>
+    <plurals name="remove_filtered_inbox_confirmation_msg">
+        <item quantity="one">Please confirm that you want to remove the %d episode with this tag from the inbox.</item>
+        <item quantity="other">Please confirm that you want to remove the %d episodes with this tag from the inbox.</item>
+    </plurals>
     <string name="inbox_view_unseen">Unseen</string>
     <string name="inbox_view_all_new">All new</string>
     <string name="tag_untagged">Untagged</string>

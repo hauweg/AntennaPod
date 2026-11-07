@@ -880,6 +880,10 @@
     <string name="statistics_expected_next_episode_any_time">Jederzeit</string>
     <string name="release_schedule_multiple_per_day">mehrmals täglich</string>
     <string name="tag_all">Alle</string>
+    <plurals name="remove_filtered_inbox_confirmation_msg">
+        <item quantity="one">Bitte bestätige, dass du die %d Episode mit diesem Tag aus dem Posteingang entfernen möchtest.</item>
+        <item quantity="other">Bitte bestätige, dass du die %d Episoden mit diesem Tag aus dem Posteingang entfernen möchtest.</item>
+    </plurals>
     <string name="inbox_view_unseen">Ungesehen</string>
     <string name="inbox_view_all_new">Alle neuen</string>
     <string name="cover_as_background">Titelbild als Hintergrund</string>

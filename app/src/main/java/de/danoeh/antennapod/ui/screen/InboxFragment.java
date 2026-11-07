@@ -88,6 +88,10 @@ public class InboxFragment extends EpisodesListFragment {
             return true;
         }
         if (item.getItemId() == R.id.remove_all_inbox_item) {
+            if (tagFilterBar.isFiltering()) {
+                tagFilterBar.loadAllInboxItems(this::removeFromInbox);
+                return true;
+            }
             if (prefs.getBoolean(PREF_DO_NOT_PROMPT_REMOVE_ALL_FROM_INBOX, false)) {
                 removeAllFromInbox();
             } else {
@@ -136,10 +140,35 @@ public class InboxFragment extends EpisodesListFragment {
         EventBus.getDefault().post(new MessageEvent(getString(R.string.removed_all_inbox_msg)));
     }
 
+    private void removeFromInbox(List<FeedItem> items) {
+        if (items.isEmpty() || getContext() == null) {
+            return;
+        }
+        if (prefs.getBoolean(PREF_DO_NOT_PROMPT_REMOVE_ALL_FROM_INBOX, false)) {
+            removeFromInboxConfirmed(items);
+        } else {
+            showRemoveAllDialog(items);
+        }
+    }
+
+    private void removeFromInboxConfirmed(List<FeedItem> items) {
+        DBWriter.markItemsPlayed(FeedItem.UNPLAYED, false, items);
+        EventBus.getDefault().post(new MessageEvent(getResources().getQuantityString(
+                R.plurals.removed_from_inbox_batch_label, items.size(), items.size())));
+    }
+
     private void showRemoveAllDialog() {
+        showRemoveAllDialog(null);
+    }
+
+    private void showRemoveAllDialog(List<FeedItem> items) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle(R.string.remove_all_inbox_label);
         builder.setMessage(R.string.remove_all_inbox_confirmation_msg);
+        if (items != null) {
+            builder.setMessage(getResources().getQuantityString(
+                    R.plurals.remove_filtered_inbox_confirmation_msg, items.size(), items.size()));
+        }
 
         View view = View.inflate(getContext(), R.layout.checkbox_do_not_show_again, null);
         CheckBox checkNeverAskAgain = view.findViewById(R.id.checkbox_do_not_show_again);
@@ -147,7 +176,11 @@ public class InboxFragment extends EpisodesListFragment {
 
         builder.setPositiveButton(R.string.confirm_label, (dialog, which) -> {
             dialog.dismiss();
-            removeAllFromInbox();
+            if (items != null) {
+                removeFromInboxConfirmed(items);
+            } else {
+                removeAllFromInbox();
+            }
             prefs.edit().putBoolean(PREF_DO_NOT_PROMPT_REMOVE_ALL_FROM_INBOX, checkNeverAskAgain.isChecked()).apply();
         });
         builder.setNegativeButton(R.string.cancel_label, null);

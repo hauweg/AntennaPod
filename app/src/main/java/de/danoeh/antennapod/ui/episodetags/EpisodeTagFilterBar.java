@@ -19,11 +19,15 @@ import java.util.Set;
 
 import de.danoeh.antennapod.R;
 import de.danoeh.antennapod.model.feed.FeedItem;
+import de.danoeh.antennapod.model.feed.FeedItemFilter;
 import de.danoeh.antennapod.model.feed.FeedPreferences;
+import de.danoeh.antennapod.storage.database.DBReader;
 import de.danoeh.antennapod.storage.database.EpisodeTagStorage;
+import de.danoeh.antennapod.storage.preferences.UserPreferences;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,6 +85,21 @@ public class EpisodeTagFilterBar extends HorizontalScrollView {
         if (tag == null) {
             return items;
         }
+        List<FeedItem> result = filter(items, tag);
+        lastResultSize = result.size();
+        return result;
+    }
+
+    public void loadAllInboxItems(Consumer<List<FeedItem>> onLoaded) {
+        String tag = selectedTag;
+        Observable.fromCallable(() -> filter(DBReader.getEpisodes(0, Integer.MAX_VALUE,
+                        new FeedItemFilter(FeedItemFilter.NEW), UserPreferences.getInboxSortedOrder()), tag))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onLoaded, error -> Log.e(TAG, Log.getStackTraceString(error)));
+    }
+
+    private List<FeedItem> filter(List<FeedItem> items, String tag) {
         Map<Long, Set<String>> itemTags = EpisodeTagStorage.getInstance(getContext()).getAllItemTags();
         List<FeedItem> result = new ArrayList<>();
         for (FeedItem item : items) {
@@ -97,7 +116,6 @@ public class EpisodeTagFilterBar extends HorizontalScrollView {
                 result.add(item);
             }
         }
-        lastResultSize = result.size();
         return result;
     }
 
