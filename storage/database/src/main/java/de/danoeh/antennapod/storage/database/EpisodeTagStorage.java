@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import de.danoeh.antennapod.model.feed.FeedItem;
+import de.danoeh.antennapod.model.feed.FeedPreferences;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -61,7 +62,8 @@ public class EpisodeTagStorage extends SQLiteOpenHelper {
         Map<Long, Set<String>> itemTags = getInstance(appContext).getAllItemTags();
         for (int i = index + 1; i < queueIds.size(); i++) {
             Set<String> tags = itemTags.get(queueIds.get(i));
-            if (tags != null && tags.contains(tag)) {
+            boolean untagged = FeedPreferences.TAG_UNTAGGED.equals(tag) && (tags == null || tags.isEmpty());
+            if (untagged || tags != null && tags.contains(tag)) {
                 return DBReader.getFeedItem(queueIds.get(i));
             }
         }

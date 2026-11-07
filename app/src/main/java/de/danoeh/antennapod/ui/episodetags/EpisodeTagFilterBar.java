@@ -19,6 +19,7 @@ import java.util.Set;
 
 import de.danoeh.antennapod.R;
 import de.danoeh.antennapod.model.feed.FeedItem;
+import de.danoeh.antennapod.model.feed.FeedPreferences;
 import de.danoeh.antennapod.storage.database.EpisodeTagStorage;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
@@ -88,6 +89,10 @@ public class EpisodeTagFilterBar extends HorizontalScrollView {
             if (!matches && includeFeedTags) {
                 matches = EpisodeTagDialog.getFeedTags(item).contains(tag);
             }
+            if (FeedPreferences.TAG_UNTAGGED.equals(tag)) {
+                matches = (tags == null || tags.isEmpty())
+                        && (!includeFeedTags || EpisodeTagDialog.getFeedTags(item).isEmpty());
+            }
             if (matches) {
                 result.add(item);
             }
@@ -134,11 +139,12 @@ public class EpisodeTagFilterBar extends HorizontalScrollView {
     }
 
     private void showTags(List<String> tags) {
-        if (selectedTag != null && !tags.contains(selectedTag)) {
+        if (selectedTag != null && !tags.contains(selectedTag) && !FeedPreferences.TAG_UNTAGGED.equals(selectedTag)) {
             tags.add(selectedTag);
         }
         chipGroup.removeAllViews();
         addChip(null, getContext().getString(R.string.tag_all));
+        addChip(FeedPreferences.TAG_UNTAGGED, getContext().getString(R.string.tag_untagged));
         for (String tag : tags) {
             addChip(tag, tag);
         }

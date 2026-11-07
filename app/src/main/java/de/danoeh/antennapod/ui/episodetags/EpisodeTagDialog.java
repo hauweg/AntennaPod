@@ -64,10 +64,8 @@ public class EpisodeTagDialog {
             List<String> allTags = loadAllTags(storage, true);
             Set<String> selected = new HashSet<>();
             for (FeedItem item : items) {
-                Set<String> stored = storage.getTags(item.getId());
-                if (!stored.isEmpty()) {
-                    selected.addAll(stored);
-                } else if (addToQueue) {
+                selected.addAll(storage.getTags(item.getId()));
+                if (addToQueue) {
                     selected.addAll(getFeedTags(item));
                 }
             }
