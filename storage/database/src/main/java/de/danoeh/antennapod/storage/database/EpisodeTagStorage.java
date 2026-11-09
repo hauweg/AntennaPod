@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import de.danoeh.antennapod.model.feed.FeedItem;
 import de.danoeh.antennapod.model.feed.FeedPreferences;
+import de.danoeh.antennapod.storage.preferences.UserPreferences;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -64,7 +65,10 @@ public class EpisodeTagStorage extends SQLiteOpenHelper {
             Set<String> tags = itemTags.get(queueIds.get(i));
             boolean untagged = FeedPreferences.TAG_UNTAGGED.equals(tag) && (tags == null || tags.isEmpty());
             if (untagged || tags != null && tags.contains(tag)) {
-                return DBReader.getFeedItem(queueIds.get(i));
+                FeedItem nextItem = DBReader.getFeedItem(queueIds.get(i));
+                if (nextItem == null || !nextItem.isPlayed() || !UserPreferences.shouldKeepPlayedInQueue()) {
+                    return nextItem;
+                }
             }
         }
         return null;

@@ -100,7 +100,8 @@ public class APCleanupAlgorithm extends EpisodeCleanupAlgorithm {
             if (item.hasMedia()
                     && item.getMedia().isDownloaded()
                     && (!item.getFeed().isLocalFeed() || UserPreferences.isAutoDeleteLocal())
-                    && !item.isTagged(FeedItem.TAG_QUEUE)
+                    && (!item.isTagged(FeedItem.TAG_QUEUE)
+                            || UserPreferences.shouldKeepPlayedInQueue() && item.isPlayed())
                     && item.isPlayed()
                     && !item.isTagged(FeedItem.TAG_FAVORITE)) {
                 FeedMedia media = item.getMedia();

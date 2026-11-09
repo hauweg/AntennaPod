@@ -687,7 +687,9 @@ public class Media3PlaybackService extends MediaLibraryService {
                 DBWriter.markItemsPlayed(FeedItem.PLAYED, true, Collections.singletonList(item));
             }
             if (ended || almostEnded || (skipped && !UserPreferences.shouldSkipKeepEpisode())) {
-                DBWriter.removeQueueItem(this, ended, item);
+                if (!UserPreferences.shouldKeepPlayedInQueue() || !(ended || almostEnded)) {
+                    DBWriter.removeQueueItem(this, ended, item);
+                }
                 FeedPreferences.AutoDeleteAction action = item.getFeed().getPreferences().getCurrentAutoDelete();
                 boolean autoDeleteEnabledGlobally = UserPreferences.isAutoDelete()
                         && (!item.getFeed().isLocalFeed() || UserPreferences.isAutoDeleteLocal());

@@ -85,7 +85,8 @@ public class APQueueCleanupAlgorithm extends EpisodeCleanupAlgorithm {
             if (item.hasMedia()
                     && item.getMedia().isDownloaded()
                     && (!item.getFeed().isLocalFeed() || UserPreferences.isAutoDeleteLocal())
-                    && !item.isTagged(FeedItem.TAG_QUEUE)
+                    && (!item.isTagged(FeedItem.TAG_QUEUE)
+                            || UserPreferences.shouldKeepPlayedInQueue() && item.isPlayed())
                     && !item.isTagged(FeedItem.TAG_FAVORITE)) {
                 candidates.add(item);
             }

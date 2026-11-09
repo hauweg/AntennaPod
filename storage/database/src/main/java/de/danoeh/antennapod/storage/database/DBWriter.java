@@ -109,7 +109,9 @@ public class DBWriter {
             deleteFeedMediaSynchronous(context, media);
             EventBus.getDefault().post(new FeedItemEvent(media.getItem() != null
                     ? Collections.singletonList(media.getItem()) : Collections.emptyList(), false));
-            if (UserPreferences.shouldDeleteRemoveFromQueue()) {
+            boolean keepPlayed = UserPreferences.shouldKeepPlayedInQueue()
+                    && media.getItem() != null && media.getItem().isPlayed();
+            if (UserPreferences.shouldDeleteRemoveFromQueue() && !keepPlayed) {
                 DBWriter.removeQueueItemSynchronous(context, false, media.getItemId());
             }
         });
