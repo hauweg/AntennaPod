@@ -32,3 +32,9 @@ Whenever a feature is finished, close it cleanly and remind the user of every st
 4. Delete the feature branch: `git push origin --delete feature/<name>` and `git branch -d feature/<name>`.
 5. Remind the user not to click "Compare & pull request" on GitHub, because that would target the upstream repository.
 6. If open points remain, offer a ready-to-copy prompt for the next session that includes the branch setup and the current state.
+
+# Fork rules (hauweg/AntennaPod)
+- One feature per session. Never work on several branches in parallel.
+- Before starting, check for unmerged feature branches and ask the user to finish and merge them into `fork-main` first.
+- For design questions, first present the options with their pros and cons and let the user decide. This takes precedence over AGENTS.md ('Do not ask for permission before making initial code changes').
+- When a feature is finished, state the name of its feature branch.
