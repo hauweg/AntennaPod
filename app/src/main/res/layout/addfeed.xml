@@ -103,6 +103,15 @@
                 style="@style/AddPodcastTextView" />
 
             <TextView
+                android:id="@+id/addSingleEpisodeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_single_episode_by_url"
+                app:drawableStartCompat="@drawable/ic_web"
+                app:drawableLeftCompat="@drawable/ic_web"
+                style="@style/AddPodcastTextView" />
+
+            <TextView
                 android:id="@+id/addLocalFolderButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

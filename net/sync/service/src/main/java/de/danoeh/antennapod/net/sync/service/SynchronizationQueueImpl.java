@@ -84,7 +84,8 @@ public class SynchronizationQueueImpl extends SynchronizationQueue {
     }
 
     public void enqueueFeedAdded(String downloadUrl) {
-        if (!SynchronizationSettings.isProviderConnected()) {
+        if (!SynchronizationSettings.isProviderConnected()
+                || (downloadUrl != null && downloadUrl.startsWith(Feed.PREFIX_SINGLE_EPISODES))) {
             return;
         }
         LockingAsyncExecutor.executeLockedAsync(() -> {
@@ -94,7 +95,8 @@ public class SynchronizationQueueImpl extends SynchronizationQueue {
     }
 
     public void enqueueFeedRemoved(String downloadUrl) {
-        if (!SynchronizationSettings.isProviderConnected()) {
+        if (!SynchronizationSettings.isProviderConnected()
+                || (downloadUrl != null && downloadUrl.startsWith(Feed.PREFIX_SINGLE_EPISODES))) {
             return;
         }
         LockingAsyncExecutor.executeLockedAsync(() -> {
@@ -104,7 +106,8 @@ public class SynchronizationQueueImpl extends SynchronizationQueue {
     }
 
     public void enqueueEpisodeAction(EpisodeAction action) {
-        if (!SynchronizationSettings.isProviderConnected()) {
+        if (!SynchronizationSettings.isProviderConnected() || (action.getPodcast() != null
+                && action.getPodcast().startsWith(Feed.PREFIX_SINGLE_EPISODES))) {
             return;
         }
         LockingAsyncExecutor.executeLockedAsync(() -> {

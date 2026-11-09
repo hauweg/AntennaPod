@@ -47,6 +47,7 @@ import de.danoeh.antennapod.ui.appstartintent.OnlineFeedviewActivityStarter;
 import de.danoeh.antennapod.ui.common.Keyboard;
 import de.danoeh.antennapod.ui.discovery.OnlineSearchFragment;
 import de.danoeh.antennapod.ui.screen.feed.FeedItemlistFragment;
+import de.danoeh.antennapod.ui.singleepisode.SingleEpisodeAdder;
 import de.danoeh.antennapod.ui.common.LiftOnScrollListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -106,6 +107,8 @@ public class AddFeedFragment extends Fragment {
 
         viewBinding.addViaUrlButton.setOnClickListener(v
                 -> showAddViaUrlDialog());
+        viewBinding.addSingleEpisodeButton.setOnClickListener(v
+                -> showAddSingleEpisodeDialog());
 
         viewBinding.opmlImportButton.setOnClickListener(v -> {
             try {
@@ -191,6 +194,47 @@ public class AddFeedFragment extends Fragment {
             }
             addUrl(inputText.toString());
             alertDialog.dismiss();
+        });
+    }
+
+    private void showAddSingleEpisodeDialog() {
+        final EditTextDialogBinding dialogBinding = EditTextDialogBinding.inflate(getLayoutInflater());
+        dialogBinding.textInput.setHint(R.string.single_episode_address);
+        dialogBinding.textInput.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_URI);
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        final ClipData clipData = clipboard.getPrimaryClip();
+        if (clipData != null && clipData.getItemCount() > 0 && clipData.getItemAt(0).getText() != null) {
+            final String clipboardContent = clipData.getItemAt(0).getText().toString().trim();
+            if (clipboardContent.startsWith("http")) {
+                dialogBinding.textInput.setText(clipboardContent);
+            }
+        }
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(getContext())
+                .setTitle(R.string.add_single_episode_by_url)
+                .setView(dialogBinding.getRoot())
+                .setPositiveButton(R.string.confirm_label, null)
+                .setNegativeButton(R.string.cancel_label, null)
+                .create();
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
+            String url = dialogBinding.textInput.getText().toString().trim();
+            if (!UrlChecker.isValidUrl(url)) {
+                dialogBinding.textInputLayout.setError(getText(R.string.single_episode_not_found));
+                return;
+            }
+            alertDialog.dismiss();
+            Context context = requireContext().getApplicationContext();
+            disposable = Observable.fromCallable(() -> SingleEpisodeAdder.add(context, url))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            item -> EventBus.getDefault().post(
+                                    new MessageEvent(context.getString(R.string.single_episode_added))),
+                            error -> {
+                                Log.e(TAG, Log.getStackTraceString(error));
+                                EventBus.getDefault().post(new MessageEvent(error.getLocalizedMessage()));
+                            });
         });
     }
 

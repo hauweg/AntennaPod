@@ -77,7 +77,8 @@ public class FeedUpdateWorker extends Worker {
             Iterator<Feed> itr = toUpdate.iterator();
             while (itr.hasNext()) {
                 Feed feed = itr.next();
-                if (!feed.getPreferences().getKeepUpdated() || feed.getState() != Feed.STATE_SUBSCRIBED) {
+                if (!feed.getPreferences().getKeepUpdated() || feed.getState() != Feed.STATE_SUBSCRIBED
+                        || feed.isSingleEpisodesFeed()) {
                     itr.remove();
                     continue;
                 }
@@ -95,7 +96,7 @@ public class FeedUpdateWorker extends Worker {
             Collections.shuffle(toUpdate); // If the worker gets cancelled early, every feed has a chance to be updated
         } else {
             Feed feed = DBReader.getFeed(feedId, false, 0, Integer.MAX_VALUE);
-            if (feed == null) {
+            if (feed == null || feed.isSingleEpisodesFeed()) {
                 return Result.success();
             }
             if (!feed.isLocalFeed()) {

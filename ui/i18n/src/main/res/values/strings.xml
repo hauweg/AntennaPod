@@ -916,6 +916,11 @@
     <!-- Local feeds -->
     <string name="add_local_folder">Add local folder</string>
     <string name="local_folder">Local folder</string>
+    <string name="add_single_episode_by_url">Add single episode by link</string>
+    <string name="single_episode_address">Link to the episode page or audio file</string>
+    <string name="single_episodes_feed_title">Single episodes</string>
+    <string name="single_episode_added">Episode added to the queue</string>
+    <string name="single_episode_not_found">No audio file found at this link</string>
     <string name="reconnect_local_folder">Reconnect local folder</string>
     <string name="reconnect_local_folder_summary">Risky: only reconnect to the exact same folder. Otherwise, you will lose all your playback state.</string>
     <string name="reconnect_local_folder_warning">In case of permission denials, you can use this to reconnect to the exact same folder. Do not select another folder.</string>
