@@ -5,7 +5,7 @@
 > They are **not** intended to be merged into the official AntennaPod app.
 > For the real app, please use [AntennaPod/AntennaPod](https://github.com/AntennaPod/AntennaPod).
 >
-> **Changes in this fork** (last updated 2026-11-09, on branch `ccr-2ebc2da4-7h74mu`):
+> **Changes in this fork** (last updated 2026-11-09, on branch `fork-main`):
 > - **Episode tags:** When adding an episode to the queue, a dialog lets you assign tags (podcast tags are preselected). Tags can also be edited from the context menu. They are stored in a separate database file (`EpisodeTags.db`); AntennaPod's own database schema is unchanged.
 > - **Tag filter bar** in the queue and the inbox, including an "Untagged" chip. The inbox filter also matches podcast tags.
 > - **Playback within a tag:** When a tag is selected in the queue, playback continues with the next queued episode that has that tag.
@@ -17,8 +17,9 @@
 > - **"Mark all as seen" in the inbox** (2026-11-09): A menu entry in the "Unseen" view marks all shown episodes (only those of the selected tag, if a tag filter is active) as seen, so the last episodes at the bottom also disappear after the next refresh.
 > - **"All" view in the inbox** (2026-11-09): "All new" is now called "All" and behaves like the original AntennaPod inbox. Scrolling there no longer marks episodes as seen; the seen/hide logic only applies to the "Unseen" view.
 > - **Add single episode by link** (2026-11-09): On the "Add podcast" screen, a new entry accepts a link to an audio file or to an episode web page. The app looks for the audio file on the page (meta tags, audio players, links), stores the episode in a separate podcast called "Single episodes" and adds it to the queue. This podcast is never refreshed and is not sent to gpodder/Nextcloud sync.
+> - **Keep played episodes in the queue** (2026-11-09): Played episodes are no longer removed from the queue automatically. They stay greyed out and are skipped when playback continues (also within a tag). A new queue menu entry "Remove played" removes them after a confirmation showing how many (only those of the selected tag, if a tag filter is active); single episodes can still be removed via "Remove from queue". Their tags are kept as long as they are in the queue. Downloaded files of played episodes are still deleted automatically if enabled, and played episodes are not downloaded again. Can be turned off in Settings → Playback → Queue ("Keep played episodes").
 >
-> Known limitations: "Mark all as seen" only hides episodes after the next refresh of all podcasts, not immediately. "Add single episode by link" cannot find the audio file on pages that load their player only via JavaScript, and episodes added from Spotify/YouTube links do not work.
+> Known limitations: "Mark all as seen" only hides episodes after the next refresh of all podcasts, not immediately. "Add single episode by link" cannot find the audio file on pages that load their player only via JavaScript, and episodes added from Spotify/YouTube links do not work. With "Keep played episodes" enabled, the setting "Delete removes from queue" does not remove played episodes from the queue.
 
 # AntennaPod
 
