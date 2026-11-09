@@ -79,6 +79,7 @@ public class DbCleanupTests {
         prefEdit.putString(UserPreferences.PREF_EPISODE_CACHE_SIZE, Integer.toString(EPISODE_CACHE_SIZE));
         prefEdit.putString(UserPreferences.PREF_EPISODE_CLEANUP, Integer.toString(cleanupAlgorithm));
         prefEdit.putBoolean(UserPreferences.PREF_AUTODL_GLOBAL, true);
+        prefEdit.putBoolean(UserPreferences.PREF_KEEP_PLAYED_IN_QUEUE, false);
         prefEdit.commit();
 
         UserPreferences.init(context);

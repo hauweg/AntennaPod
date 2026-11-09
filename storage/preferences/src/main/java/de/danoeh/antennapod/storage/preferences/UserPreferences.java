@@ -86,6 +86,7 @@ public abstract class UserPreferences {
     public static final String PREF_FOLLOW_QUEUE = "prefFollowQueue";
     public static final String PREF_SKIP_KEEPS_EPISODE = "prefSkipKeepsEpisode";
     public static final String PREF_FAVORITE_KEEPS_EPISODE = "prefFavoriteKeepsEpisode";
+    public static final String PREF_KEEP_PLAYED_IN_QUEUE = "prefKeepPlayedInQueue";
     public static final String PREF_AUTO_DELETE = "prefAutoDelete";
     private static final String PREF_AUTO_DELETE_LOCAL = "prefAutoDeleteLocal";
     public static final String PREF_SMART_MARK_AS_PLAYED_SECS = "prefSmartMarkAsPlayedSecs";
@@ -430,6 +431,10 @@ public abstract class UserPreferences {
 
     public static boolean shouldSkipKeepEpisode() {
         return prefs.getBoolean(PREF_SKIP_KEEPS_EPISODE, true);
+    }
+
+    public static boolean shouldKeepPlayedInQueue() {
+        return prefs.getBoolean(PREF_KEEP_PLAYED_IN_QUEUE, true);
     }
 
     public static boolean shouldFavoriteKeepEpisode() {

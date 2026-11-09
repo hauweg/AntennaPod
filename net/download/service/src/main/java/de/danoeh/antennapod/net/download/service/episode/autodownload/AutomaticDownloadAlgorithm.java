@@ -71,6 +71,7 @@ public class AutomaticDownloadAlgorithm {
                     FeedItem item = it.next();
                     if (!item.isAutoDownloadEnabled()
                             || item.isDownloaded()
+                            || item.isPlayed()
                             || !item.hasMedia()
                             || item.getFeed().isLocalFeed()) {
                         it.remove();

@@ -41,6 +41,7 @@ import de.danoeh.antennapod.model.download.DownloadResult;
 import de.danoeh.antennapod.model.feed.SortOrder;
 import de.danoeh.antennapod.storage.database.mapper.FeedItemFilterQuery;
 import de.danoeh.antennapod.storage.database.mapper.FeedItemSortQuery;
+import de.danoeh.antennapod.storage.preferences.UserPreferences;
 
 import de.danoeh.antennapod.system.utils.ThreadUtils;
 import org.apache.commons.io.FileUtils;
@@ -1079,6 +1080,8 @@ public class PodDBAdapter {
                 + " WHERE Queue.ID > (SELECT Queue.ID FROM Queue WHERE Queue.FeedItem = "
                 +  item.getId()
                 + ")"
+                + (UserPreferences.shouldKeepPlayedInQueue()
+                        ? " AND " + TABLE_NAME_FEED_ITEMS + "." + KEY_READ + " != " + FeedItem.PLAYED : "")
                 + " ORDER BY Queue.ID"
                 + " LIMIT 1";
         return db.rawQuery(query, null);

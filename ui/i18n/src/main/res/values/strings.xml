@@ -841,6 +841,14 @@
         <item quantity="other">Please confirm that you want to remove the %d episodes with this tag from the inbox.</item>
     </plurals>
     <string name="inbox_view_unseen">Unseen</string>
+    <string name="remove_played_from_queue_label">Remove played</string>
+    <plurals name="remove_played_from_queue_confirmation_msg">
+        <item quantity="one">Please confirm that you want to remove the %d played episode from the queue.</item>
+        <item quantity="other">Please confirm that you want to remove the %d played episodes from the queue.</item>
+    </plurals>
+    <string name="no_played_in_queue_msg">There are no played episodes in the queue.</string>
+    <string name="pref_keep_played_in_queue_title">Keep played episodes</string>
+    <string name="pref_keep_played_in_queue_sum">Played episodes stay grayed out in the queue until you remove them</string>
     <string name="inbox_view_all_new">All</string>
     <string name="inbox_mark_all_seen">Mark all as seen</string>
     <string name="tag_untagged">Untagged</string>

@@ -39,6 +39,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -318,6 +319,9 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
             };
             conDialog.createNewDialog().show();
             return true;
+        } else if (itemId == R.id.remove_played_from_queue) {
+            removePlayedFromQueue();
+            return true;
         } else if (itemId == R.id.action_search) {
             ((MainActivity) getActivity()).loadChildFragment(
                     SearchFragment.newInstance(new FeedItemFilter(FeedItemFilter.QUEUED,
@@ -325,6 +329,41 @@ public class QueueFragment extends Fragment implements MaterialToolbar.OnMenuIte
             return true;
         }
         return false;
+    }
+
+    private void removePlayedFromQueue() {
+        Observable.fromCallable(() -> {
+            List<FeedItem> played = new ArrayList<>();
+            for (FeedItem queueItem : tagFilterBar.filter(DBReader.getQueue())) {
+                if (queueItem.isPlayed()) {
+                    played.add(queueItem);
+                }
+            }
+            return played;
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(played -> {
+                    if (played.isEmpty()) {
+                        EventBus.getDefault().post(new MessageEvent(getString(R.string.no_played_in_queue_msg)));
+                        return;
+                    }
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.remove_played_from_queue_label)
+                            .setMessage(getResources().getQuantityString(
+                                    R.plurals.remove_played_from_queue_confirmation_msg, played.size(), played.size()))
+                            .setPositiveButton(R.string.confirm_label, (dialog, which) -> {
+                                long[] ids = new long[played.size()];
+                                for (int i = 0; i < played.size(); i++) {
+                                    ids[i] = played.get(i).getId();
+                                }
+                                DBWriter.removeQueueItem(requireContext(), true, ids);
+                                EventBus.getDefault().post(new MessageEvent(getResources().getQuantityString(
+                                        R.plurals.removed_from_queue_message, played.size(), played.size())));
+                            })
+                            .setNegativeButton(R.string.cancel_label, null)
+                            .show();
+                }, error -> Log.e(TAG, Log.getStackTraceString(error)));
     }
 
     private void toggleQueueLock() {

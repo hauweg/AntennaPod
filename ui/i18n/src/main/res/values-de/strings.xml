@@ -885,6 +885,14 @@
         <item quantity="other">Bitte bestätige, dass du die %d Episoden mit diesem Tag aus dem Posteingang entfernen möchtest.</item>
     </plurals>
     <string name="inbox_view_unseen">Ungesehen</string>
+    <string name="remove_played_from_queue_label">Gehörte entfernen</string>
+    <plurals name="remove_played_from_queue_confirmation_msg">
+        <item quantity="one">Bitte bestätige, dass du die %d gehörte Episode aus der Warteschlange entfernen möchtest.</item>
+        <item quantity="other">Bitte bestätige, dass du die %d gehörten Episoden aus der Warteschlange entfernen möchtest.</item>
+    </plurals>
+    <string name="no_played_in_queue_msg">In der Warteschlange sind keine gehörten Episoden.</string>
+    <string name="pref_keep_played_in_queue_title">Gehörte Episoden behalten</string>
+    <string name="pref_keep_played_in_queue_sum">Gehörte Episoden bleiben ausgegraut in der Warteschlange, bis du sie entfernst</string>
     <string name="inbox_view_all_new">Alle</string>
     <string name="inbox_mark_all_seen">Alle als gesehen markieren</string>
     <string name="cover_as_background">Titelbild als Hintergrund</string>
