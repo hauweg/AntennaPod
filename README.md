@@ -5,17 +5,19 @@
 > They are **not** intended to be merged into the official AntennaPod app.
 > For the real app, please use [AntennaPod/AntennaPod](https://github.com/AntennaPod/AntennaPod).
 >
-> **Changes in this fork** (last updated 2026-11-07, on branch `claude/jolly-bell-c5tu6j`):
+> **Changes in this fork** (last updated 2026-11-09, on branch `claude/inbox-mark-all-seen-logic-0lkj0l`):
 > - **Episode tags:** When adding an episode to the queue, a dialog lets you assign tags (podcast tags are preselected). Tags can also be edited from the context menu. They are stored in a separate database file (`EpisodeTags.db`); AntennaPod's own database schema is unchanged.
 > - **Tag filter bar** in the queue and the inbox, including an "Untagged" chip. The inbox filter also matches podcast tags.
 > - **Playback within a tag:** When a tag is selected in the queue, playback continues with the next queued episode that has that tag.
-> - **Inbox "Unseen" view:** Episodes you scroll past are greyed out and hidden after the next refresh of all podcasts. You can switch between "Unseen" and "All new". The seen state is stored in a separate database file (`InboxSeen.db`).
+> - **Inbox "Unseen" view:** Episodes you scroll past are greyed out and hidden after the next refresh of all podcasts. You can switch between "Unseen" and "All". The seen state is stored in a separate database file (`InboxSeen.db`).
 > - **Build workflow** (`.github/workflows/fork-debug-apk.yml`): builds a signed debug APK on every push.
 > - **Reordering with a tag filter** (2026-11-07): Drag-to-reorder also works while a tag is selected in the queue. The episode is placed directly before or after its neighbour in the filtered view; hidden episodes keep their order.
 > - **"Remove all from inbox" with a tag filter** (2026-11-07): Only the inbox episodes with the selected tag are removed (including ones hidden by the "Unseen" view). The confirmation shows how many. Without a tag filter, everything is removed as before.
 > - **Tag clean-up** (2026-11-07): After each refresh of all podcasts, tags of episodes that are played and no longer in the queue (or no longer exist) are removed.
+> - **"Mark all as seen" in the inbox** (2026-11-09): A menu entry in the "Unseen" view marks all shown episodes (only those of the selected tag, if a tag filter is active) as seen, so the last episodes at the bottom also disappear after the next refresh.
+> - **"All" view in the inbox** (2026-11-09): "All new" is now called "All" and behaves like the original AntennaPod inbox. Scrolling there no longer marks episodes as seen; the seen/hide logic only applies to the "Unseen" view.
 >
-> Known limitations: none known at the moment.
+> Known limitations: "Mark all as seen" only hides episodes after the next refresh of all podcasts, not immediately.
 
 # AntennaPod
 

@@ -78,6 +78,11 @@ public class InboxFragment extends EpisodesListFragment {
     }
 
     @Override
+    protected void updateToolbar() {
+        toolbar.getMenu().findItem(R.id.inbox_mark_all_seen).setVisible(seenFilterBar.isFiltering());
+    }
+
+    @Override
     protected void onItemsFirstLoaded() {
         recyclerView.restoreScrollPosition(scrollPosition);
     }
@@ -97,6 +102,9 @@ public class InboxFragment extends EpisodesListFragment {
             } else {
                 showRemoveAllDialog();
             }
+            return true;
+        } else if (item.getItemId() == R.id.inbox_mark_all_seen) {
+            seenFilterBar.markAllSeen(episodes, recyclerView);
             return true;
         } else if (item.getItemId() == R.id.inbox_sort) {
             new InboxSortDialog().show(getChildFragmentManager(), "SortDialog");

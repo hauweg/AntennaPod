@@ -885,7 +885,8 @@
         <item quantity="other">Bitte bestätige, dass du die %d Episoden mit diesem Tag aus dem Posteingang entfernen möchtest.</item>
     </plurals>
     <string name="inbox_view_unseen">Ungesehen</string>
-    <string name="inbox_view_all_new">Alle neuen</string>
+    <string name="inbox_view_all_new">Alle</string>
+    <string name="inbox_mark_all_seen">Alle als gesehen markieren</string>
     <string name="cover_as_background">Titelbild als Hintergrund</string>
     <string name="archive_feed_label_verb">Archivieren</string>
     <string name="archive_feed_label_noun">Archiv</string>

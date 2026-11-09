@@ -841,7 +841,8 @@
         <item quantity="other">Please confirm that you want to remove the %d episodes with this tag from the inbox.</item>
     </plurals>
     <string name="inbox_view_unseen">Unseen</string>
-    <string name="inbox_view_all_new">All new</string>
+    <string name="inbox_view_all_new">All</string>
+    <string name="inbox_mark_all_seen">Mark all as seen</string>
     <string name="tag_untagged">Untagged</string>
     <string name="multi_feed_common_tags_info">Only common tags from all selected subscriptions are shown. Other tags stay unaffected.</string>
     <string name="episode_filters_label">Episode filter</string>

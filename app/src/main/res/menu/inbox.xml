@@ -19,6 +19,11 @@
         android:title="@string/sort" />
 
     <item
+        android:id="@+id/inbox_mark_all_seen"
+        android:title="@string/inbox_mark_all_seen"
+        custom:showAsAction="never" />
+
+    <item
         android:id="@+id/remove_all_inbox_item"
         android:title="@string/remove_all_inbox_label"
         android:menuCategory="container"

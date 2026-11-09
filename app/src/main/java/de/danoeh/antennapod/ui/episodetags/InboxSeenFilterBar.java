@@ -179,7 +179,7 @@ public class InboxSeenFilterBar extends ChipGroup {
                 nowVisible.add(item.getId());
             }
         }
-        if (dy > 0) {
+        if (dy > 0 && unseenOnly) {
             List<Long> newlySeen = new ArrayList<>();
             for (long itemId : visibleItems) {
                 if (!nowVisible.contains(itemId) && !seenItems.containsKey(itemId)) {
@@ -190,6 +190,17 @@ public class InboxSeenFilterBar extends ChipGroup {
         }
         visibleItems.clear();
         visibleItems.addAll(nowVisible);
+    }
+
+    public void markAllSeen(List<FeedItem> items, RecyclerView view) {
+        List<Long> newlySeen = new ArrayList<>();
+        for (FeedItem item : items) {
+            if (!seenItems.containsKey(item.getId())) {
+                newlySeen.add(item.getId());
+            }
+        }
+        markSeen(newlySeen);
+        view.invalidate();
     }
 
     private void markSeen(List<Long> itemIds) {
