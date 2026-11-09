@@ -10,6 +10,20 @@ Branch model:
 - Pushing to the feature branch, and to `fork-main` only when merging, is allowed instead of the automatically assigned session branch.
 - Only one session works at a time. Before starting, always branch from the latest `fork-main`.
 
+Working with the user:
+- The user is a GitHub beginner. Communicate in German, use gender-neutral language with a colon (e.g. "Nutzer:innen"),
+  outline the steps before executing them and show every git command with a one-sentence explanation.
+- Never create a pull request.
+- The local machine has no Android SDK. The compile check is the GitHub Actions build `Fork Debug APK`.
+
+Starting a new feature (when the user only describes a feature and names a branch `feature/<name>`):
+1. `git fetch origin fork-main`
+2. `git checkout -B feature/<name> origin/fork-main`
+3. Check the "Changes in this fork" list in `README.md` to understand the current state.
+4. First push with `git push -u origin feature/<name>`.
+If the user names no branch, suggest a short `feature/<name>` and use it.
+If deleting a branch on GitHub is refused, tell the user how to delete it in the GitHub web interface.
+
 Whenever a feature is finished, close it cleanly and remind the user of every step, in German, explained for a GitHub beginner
 (show every git command and explain it in one sentence):
 1. Push all commits to the feature branch and make sure the GitHub Actions build `Fork Debug APK` is green. Give the link to the build and its APK artifact. Then wait until the user has tested the APK and confirmed that it works.
