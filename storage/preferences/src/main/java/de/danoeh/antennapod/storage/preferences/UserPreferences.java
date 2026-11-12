@@ -87,6 +87,8 @@ public abstract class UserPreferences {
     public static final String PREF_SKIP_KEEPS_EPISODE = "prefSkipKeepsEpisode";
     public static final String PREF_FAVORITE_KEEPS_EPISODE = "prefFavoriteKeepsEpisode";
     public static final String PREF_KEEP_PLAYED_IN_QUEUE = "prefKeepPlayedInQueue";
+    public static final String PREF_SLEEP_TIMER_MOTION_SENSITIVITY = "prefSleepTimerMotionSensitivity";
+    public static final String PREF_SLEEP_TIMER_MOTION_FADE_SECS = "prefSleepTimerMotionFadeSecs";
     public static final String PREF_AUTO_DELETE = "prefAutoDelete";
     private static final String PREF_AUTO_DELETE_LOCAL = "prefAutoDeleteLocal";
     public static final String PREF_SMART_MARK_AS_PLAYED_SECS = "prefSmartMarkAsPlayedSecs";
@@ -435,6 +437,14 @@ public abstract class UserPreferences {
 
     public static boolean shouldKeepPlayedInQueue() {
         return prefs.getBoolean(PREF_KEEP_PLAYED_IN_QUEUE, true);
+    }
+
+    public static String getSleepTimerMotionSensitivity() {
+        return prefs.getString(PREF_SLEEP_TIMER_MOTION_SENSITIVITY, "medium");
+    }
+
+    public static long getSleepTimerMotionFadeMillis() {
+        return Long.parseLong(prefs.getString(PREF_SLEEP_TIMER_MOTION_FADE_SECS, "30")) * 1000;
     }
 
     public static boolean shouldFavoriteKeepEpisode() {

@@ -43,6 +43,7 @@ import de.danoeh.antennapod.event.playback.SleepTimerUpdatedEvent;
 import de.danoeh.antennapod.playback.service.PlaybackController;
 import de.danoeh.antennapod.playback.service.PlaybackServiceInterface;
 import de.danoeh.antennapod.playback.service.internal.MediaLibrarySessionCallback;
+import de.danoeh.antennapod.playback.service.internal.MotionDetector;
 import de.danoeh.antennapod.playback.base.PlayerStatus;
 import de.danoeh.antennapod.storage.database.DBReader;
 import de.danoeh.antennapod.storage.preferences.PlaybackPreferences;
@@ -74,6 +75,12 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
     private Disposable disposable;
     private volatile Integer currentQueueSize = null;
     private volatile FeedMedia currentMedia = null;
+    private MotionDetector motionDetector;
+    private final Runnable hideMotionDetected = () -> {
+        if (viewBinding != null) {
+            viewBinding.motionIndicatorText.setText(R.string.sleep_timer_motion_none);
+        }
+    };
 
     public SleepTimerDialog() {
     }
@@ -88,6 +95,16 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
         };
         controller.init();
         EventBus.getDefault().register(this);
+        motionDetector = new MotionDetector(requireContext(), () -> {
+            viewBinding.motionIndicatorText.setText(R.string.sleep_timer_motion_detected);
+            viewBinding.motionIndicatorText.removeCallbacks(hideMotionDetected);
+            viewBinding.motionIndicatorText.postDelayed(hideMotionDetected, 1500);
+        });
+        try {
+            motionDetector.start();
+        } catch (UnsupportedOperationException e) {
+            motionDetector = null;
+        }
 
         disposable = Single.fromCallable(() -> {
             FeedMedia media = DBReader.getFeedMedia(PlaybackPreferences.getCurrentlyPlayingFeedMediaId());
@@ -119,6 +136,11 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
             disposable = null;
         }
         EventBus.getDefault().unregister(this);
+        if (motionDetector != null) {
+            motionDetector.stop();
+            motionDetector = null;
+        }
+        viewBinding.motionIndicatorText.removeCallbacks(hideMotionDetected);
     }
 
     @NonNull
@@ -151,6 +173,7 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
         // add "title" for all options
         spinnerContent.add(getString(R.string.time_minutes));
         spinnerContent.add(getString(R.string.sleep_timer_episodes_label));
+        spinnerContent.add(getString(R.string.sleep_timer_motion_label));
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 getContext(), android.R.layout.simple_spinner_item, spinnerContent);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -317,6 +340,8 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
         // let the user use anything other than 1 episode
         boolean isEpisodeType = SleepTimerPreferences.getSleepTimerType() == SleepTimerType.EPISODES;
         boolean noEpisodeSelection = isEpisodeType && !UserPreferences.isFollowQueue();
+        boolean isMotionType = SleepTimerPreferences.getSleepTimerType() == SleepTimerType.MOTION;
+        viewBinding.motionIndicatorText.setVisibility(isMotionType ? View.VISIBLE : View.GONE);
 
         if (noEpisodeSelection) {
             viewBinding.timeEditText.setEnabled(false);
@@ -332,8 +357,8 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
             viewBinding.playbackPreferencesButton.setVisibility(View.GONE);
             viewBinding.autoEnableCheckbox.setVisibility(View.VISIBLE);
             viewBinding.changeTimesButton.setVisibility(View.VISIBLE);
-            viewBinding.shakeToResetCheckbox.setVisibility(isEpisodeType ? View.GONE : View.VISIBLE);
-            viewBinding.vibrateCheckbox.setVisibility(View.VISIBLE);
+            viewBinding.shakeToResetCheckbox.setVisibility(isEpisodeType || isMotionType ? View.GONE : View.VISIBLE);
+            viewBinding.vibrateCheckbox.setVisibility(isMotionType ? View.GONE : View.VISIBLE);
             viewBinding.setSleeptimerButton.setEnabled(true);
             viewBinding.timeEditText.setEnabled(true);
             long selectedSleepTime;
@@ -381,7 +406,7 @@ public class SleepTimerDialog extends BottomSheetDialogFragment {
         viewBinding.extendSleepTenMinutesButton.setEnabled(!noEpisodeSelection);
         viewBinding.extendSleepTwentyMinutesButton.setEnabled(!noEpisodeSelection);
 
-        if (SleepTimerPreferences.getSleepTimerType() == SleepTimerType.CLOCK) {
+        if (SleepTimerPreferences.getSleepTimerType() != SleepTimerType.EPISODES) {
             setupExtendButton(viewBinding.extendSleepFiveMinutesButton,
                     getString(R.string.extend_sleep_timer_label, EXTEND_FEW_MINUTES_DISPLAY_VALUE),
                     EXTEND_FEW_MINUTES);

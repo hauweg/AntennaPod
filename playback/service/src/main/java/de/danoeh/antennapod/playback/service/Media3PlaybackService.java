@@ -55,6 +55,7 @@ import de.danoeh.antennapod.playback.service.internal.SkipUtils;
 import de.danoeh.antennapod.playback.service.internal.SleepTimer;
 import de.danoeh.antennapod.playback.service.internal.ClockSleepTimer;
 import de.danoeh.antennapod.playback.service.internal.EpisodeSleepTimer;
+import de.danoeh.antennapod.playback.service.internal.MotionSleepTimer;
 import de.danoeh.antennapod.storage.database.DBReader;
 import de.danoeh.antennapod.storage.database.DBWriter;
 import de.danoeh.antennapod.storage.preferences.PlaybackPreferences;
@@ -888,6 +889,10 @@ public class Media3PlaybackService extends MediaLibraryService {
             Log.d(TAG, "Sleep timer expired, pausing playback");
             if (player != null) {
                 applyVolumeAdaption(1.0f);
+                if (sleepTimer instanceof MotionSleepTimer) {
+                    long restTime = ((MotionSleepTimer) sleepTimer).getRestTime();
+                    player.seekTo(Math.max(0, player.getCurrentPosition() - restTime));
+                }
                 player.pause();
             }
             sleepTimer = null;
@@ -897,8 +902,10 @@ public class Media3PlaybackService extends MediaLibraryService {
             sessionCallback.refreshNotification(mediaSession);
         } else if (!event.wasJustEnabled()) {
             long millisLeft = event.getMillisTimeLeft();
-            if (millisLeft < SleepTimer.NOTIFICATION_THRESHOLD && millisLeft > 0) {
-                float volume = (float) millisLeft / SleepTimer.NOTIFICATION_THRESHOLD;
+            long fadeMillis = sleepTimer instanceof MotionSleepTimer
+                    ? UserPreferences.getSleepTimerMotionFadeMillis() : SleepTimer.NOTIFICATION_THRESHOLD;
+            if (millisLeft < fadeMillis && millisLeft > 0) {
+                float volume = (float) millisLeft / fadeMillis;
                 applyVolumeAdaption(Math.max(0.1f, volume));
             } else {
                 applyVolumeAdaption(1.0f);
@@ -913,6 +920,8 @@ public class Media3PlaybackService extends MediaLibraryService {
         }
         if (SleepTimerPreferences.getSleepTimerType() == SleepTimerType.EPISODES) {
             sleepTimer = new EpisodeSleepTimer(this);
+        } else if (SleepTimerPreferences.getSleepTimerType() == SleepTimerType.MOTION) {
+            sleepTimer = new MotionSleepTimer(this);
         } else {
             sleepTimer = new ClockSleepTimer(this);
         }

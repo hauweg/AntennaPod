@@ -849,6 +849,17 @@
     <string name="no_played_in_queue_msg">There are no played episodes in the queue.</string>
     <string name="pref_keep_played_in_queue_title">Keep played episodes</string>
     <string name="pref_keep_played_in_queue_sum">Played episodes stay grayed out in the queue until you remove them</string>
+    <string name="sleep_timer_motion_label">min. without movement</string>
+    <string name="sleep_timer_motion_none">No movement</string>
+    <string name="sleep_timer_motion_detected">Movement detected</string>
+    <string name="pref_sleep_timer_motion_category">Sleep timer without movement</string>
+    <string name="pref_sleep_timer_motion_sensitivity_title">Movement sensitivity</string>
+    <string name="pref_sleep_timer_motion_sensitivity_sum">How small a movement restarts the sleep timer</string>
+    <string name="sleep_timer_motion_sensitivity_low">Low</string>
+    <string name="sleep_timer_motion_sensitivity_medium">Medium</string>
+    <string name="sleep_timer_motion_sensitivity_high">High</string>
+    <string name="pref_sleep_timer_motion_fade_title">Fade-out duration (seconds)</string>
+    <string name="pref_sleep_timer_motion_fade_sum">The volume is lowered slowly before playback pauses. Moving restores it.</string>
     <string name="inbox_view_all_new">All</string>
     <string name="inbox_mark_all_seen">Mark all as seen</string>
     <string name="tag_untagged">Untagged</string>
