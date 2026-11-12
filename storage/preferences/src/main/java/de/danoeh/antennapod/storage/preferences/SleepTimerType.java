@@ -2,7 +2,8 @@ package de.danoeh.antennapod.storage.preferences;
 
 public enum SleepTimerType {
     CLOCK(0),
-    EPISODES(1);
+    EPISODES(1),
+    MOTION(2);
 
     public final int index;
 

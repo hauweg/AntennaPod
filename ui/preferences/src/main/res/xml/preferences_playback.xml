@@ -98,4 +98,21 @@
                 android:summary="@string/pref_keep_played_in_queue_sum"
                 android:title="@string/pref_keep_played_in_queue_title"/>
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_sleep_timer_motion_category">
+        <de.danoeh.antennapod.ui.preferences.preference.MaterialListPreference
+                android:defaultValue="medium"
+                android:entries="@array/sleep_timer_motion_sensitivity_options"
+                android:entryValues="@array/sleep_timer_motion_sensitivity_values"
+                android:key="prefSleepTimerMotionSensitivity"
+                android:summary="@string/pref_sleep_timer_motion_sensitivity_sum"
+                android:title="@string/pref_sleep_timer_motion_sensitivity_title"/>
+        <de.danoeh.antennapod.ui.preferences.preference.MaterialListPreference
+                android:defaultValue="30"
+                android:entries="@array/sleep_timer_motion_fade_values"
+                android:entryValues="@array/sleep_timer_motion_fade_values"
+                android:key="prefSleepTimerMotionFadeSecs"
+                android:summary="@string/pref_sleep_timer_motion_fade_sum"
+                android:title="@string/pref_sleep_timer_motion_fade_title"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -979,4 +979,15 @@
     <string name="wearos_browse_phone" tools:ignore="UnusedResources">Smartphone durchsuchen</string>
     <string name="wearos_open_on_phone" tools:ignore="UnusedResources">Auf dem Smartphone öffnen</string>
     <string name="queue_time_left_label">%1$s • %2$s verbleibend</string>
+    <string name="sleep_timer_motion_label">Min ohne Bewegungen</string>
+    <string name="sleep_timer_motion_none">Keine Bewegung</string>
+    <string name="sleep_timer_motion_detected">Bewegung erkannt</string>
+    <string name="pref_sleep_timer_motion_category">Schlummerfunktion ohne Bewegungen</string>
+    <string name="pref_sleep_timer_motion_sensitivity_title">Bewegungsempfindlichkeit</string>
+    <string name="pref_sleep_timer_motion_sensitivity_sum">Wie klein eine Bewegung sein darf, um die Schlummerfunktion neu zu starten</string>
+    <string name="sleep_timer_motion_sensitivity_low">Niedrig</string>
+    <string name="sleep_timer_motion_sensitivity_medium">Mittel</string>
+    <string name="sleep_timer_motion_sensitivity_high">Hoch</string>
+    <string name="pref_sleep_timer_motion_fade_title">Ausblenddauer (Sekunden)</string>
+    <string name="pref_sleep_timer_motion_fade_sum">Die Lautstärke wird langsam verringert, bevor die Wiedergabe pausiert. Eine Bewegung stellt sie wieder her.</string>
 </resources>

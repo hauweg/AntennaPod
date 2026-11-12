@@ -15,6 +15,7 @@ public class SleepTimerPreferences {
     public static final String PREF_NAME = "SleepTimerDialog";
     private static final String PREF_VALUE_MINUTES = "LastValue";
     private static final String PREF_VALUE_EPISODES = "LastValueEpisodes";
+    private static final String PREF_VALUE_MOTION_MINUTES = "LastValueMotion";
 
     private static final String PREF_TIMER_TYPE = "sleepTimerType";
     private static final String PREF_VIBRATE = "Vibrate";
@@ -40,13 +41,18 @@ public class SleepTimerPreferences {
     }
 
     public static void setLastTimer(String value) {
-        prefs.edit().putString(getSleepTimerType() == SleepTimerType.CLOCK
-                ? PREF_VALUE_MINUTES : PREF_VALUE_EPISODES, value).apply();
+        prefs.edit().putString(switch (getSleepTimerType()) {
+            case CLOCK -> PREF_VALUE_MINUTES;
+            case EPISODES -> PREF_VALUE_EPISODES;
+            case MOTION -> PREF_VALUE_MOTION_MINUTES;
+        }, value).apply();
     }
 
     public static String lastTimerValue() {
         if (getSleepTimerType() == SleepTimerType.CLOCK) {
             return prefs.getString(PREF_VALUE_MINUTES, "15");
+        } else if (getSleepTimerType() == SleepTimerType.MOTION) {
+            return prefs.getString(PREF_VALUE_MOTION_MINUTES, "15");
         } else {
             return prefs.getString(PREF_VALUE_EPISODES, "1");
         }
@@ -54,7 +60,7 @@ public class SleepTimerPreferences {
 
     public static long timerMillisOrEpisodes() {
         return switch (getSleepTimerType()) {
-            case CLOCK -> TimeUnit.MINUTES.toMillis(Long.parseLong(lastTimerValue()));
+            case CLOCK, MOTION -> TimeUnit.MINUTES.toMillis(Long.parseLong(lastTimerValue()));
             case EPISODES -> Long.parseLong(SleepTimerPreferences.lastTimerValue());
         };
     }

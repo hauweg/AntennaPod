@@ -183,6 +183,24 @@
         <item>@string/keycode_media_previous</item>
     </string-array>
 
+    <string-array name="sleep_timer_motion_sensitivity_options">
+        <item>@string/sleep_timer_motion_sensitivity_low</item>
+        <item>@string/sleep_timer_motion_sensitivity_medium</item>
+        <item>@string/sleep_timer_motion_sensitivity_high</item>
+    </string-array>
+
+    <string-array name="sleep_timer_motion_sensitivity_values">
+        <item>low</item>
+        <item>medium</item>
+        <item>high</item>
+    </string-array>
+
+    <string-array name="sleep_timer_motion_fade_values">
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
     <string-array name="enqueue_location_options">
         <item>@string/enqueue_location_back</item>
         <item>@string/enqueue_location_front</item>
